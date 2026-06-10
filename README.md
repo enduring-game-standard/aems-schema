@@ -182,7 +182,7 @@ The boundary: the **standard** defines the four event kinds and their structural
 
 ## Ecosystem Connections
 
-AEMS is one protocol in a four-protocol architecture. Each protocol handles a different structural concern:
+AEMS is one protocol in a four-protocol architecture; the full topology is owned by the [EGS correspondence map](https://github.com/enduring-game-standard/.github/blob/main/profile/CORRESPONDENCE.md). AEMS's own edges:
 
 ### AEMS → RUNS
 
