@@ -28,11 +28,11 @@ This is possible because AEMS entities are [Nostr](https://nostr.com) events —
 
 ## A Concrete Example
 
-A community publishes a **Sword** Entity (kind 30050) to Nostr relays: a universal archetype with a name, category, and description. The Entity belongs to no studio. Anyone can discover it by querying relays for kind 30050 events.
+A community publishes a **Sword** Entity event to Nostr relays: a universal archetype with a name, category, and description. The Entity belongs to no studio. Anyone can discover it by querying relays for Entity events.
 
-Studio A builds an action RPG and publishes a **Manifestation** (kind 30051) of the Sword Entity: a "Flameblade" with 120 base damage, a fire enchantment, and custom visual properties specific to their game. Studio B builds a survival game and publishes a different Manifestation of the same Sword Entity: a "Rustic Blade" with durability mechanics and crafting requirements. Both Manifestations reference the same underlying Entity.
+Studio A builds an action RPG and publishes a **Manifestation** of the Sword Entity: a "Flameblade" with 120 base damage, a fire enchantment, and custom visual properties specific to their game. Studio B builds a survival game and publishes a different Manifestation of the same Sword Entity: a "Rustic Blade" with durability mechanics and crafting requirements. Both Manifestations reference the same underlying Entity.
 
-A player in Studio A's game earns a Flameblade by completing a quest. The game publishes an **Asset** event (kind 30052) signed by the player's Nostr keypair, recording ownership of that specific instance.
+A player in Studio A's game earns a Flameblade by completing a quest. The game publishes an **Asset** event signed by the player's Nostr keypair, recording ownership of that specific instance.
 
 Studio A closes. Its servers go dark.
 
@@ -42,7 +42,9 @@ The player's Asset event is still on Nostr relays. Studio B's game can read it, 
 
 ## The Four Layers
 
-AEMS defines a four-layer hierarchy. Each layer is a Nostr addressable event (kind 30050–30053), identified by its publisher's public key and a `d`-tag.
+AEMS defines a four-layer hierarchy. Each layer is a Nostr addressable event with its own dedicated event kind, identified by its publisher's public key and a `d`-tag.
+
+> **Note**: The concrete Nostr kind numbers are deliberately not yet assigned. Allocations are deferred until they are formalized against real relay usage; until then, examples use named placeholders such as `"<AEMS Entity kind>"`.
 
 ```
 Entity → Manifestation → Asset → State
@@ -51,13 +53,13 @@ universal   game-spec    player    mutable
 archetype   interpret    instance  condition
 ```
 
-### Entity (Kind 30050)
+### Entity
 
 A **named role** — an IP-agnostic concept that exists independently of any game. Entities are maintained by communities, not studios. An Entity names what something IS in universal terms: "Sword," "Health Potion," "Monster." Any Nostr user can publish an Entity; the protocol imposes no registry and no gatekeeping. Entities carry no grouping tags — only a `d`-tag identifier, a human-readable `name`, and a plain-language description.
 
 ```json
 {
-  "kind": 30050,
+  "kind": "<AEMS Entity kind>",
   "pubkey": "...",
   "tags": [
     ["d", "health-potion"],
@@ -71,7 +73,7 @@ A **named role** — an IP-agnostic concept that exists independently of any gam
 
 Entities use parameterized replacement: for a given `pubkey` and `d`-tag, relays store only the latest version, allowing community evolution without losing identity.
 
-### Manifestation (Kind 30051)
+### Manifestation
 
 A **game-specific implementation** of one or more Entities. How a particular game interprets, expresses, and balances the universal role. Every Manifestation MUST include at least one `entity` tag referencing a parent Entity. A Manifestation may reference multiple Entities, declaring all the roles the game object participates in.
 
@@ -79,7 +81,7 @@ A Manifestation is the layer that a RUNS build process compiles into type defini
 
 ```json
 {
-  "kind": 30051,
+  "kind": "<AEMS Manifestation kind>",
   "pubkey": "...",
   "tags": [
     ["d", "rpg-adventure:potion"],
@@ -98,7 +100,7 @@ A Manifestation is the layer that a RUNS build process compiles into type defini
 
 Different games create different Manifestations of the same Entity. A "Health Potion" Entity might become a "Flask" in Dark Souls, a "Potion" in Final Fantasy VII, or a "Splash Potion" in Minecraft. Each Manifestation inherits the archetype and adapts it.
 
-### Asset (Kind 30052)
+### Asset
 
 A **player-owned instance** of a Manifestation. When a player acquires an item, they publish an Asset event signed by their own Nostr keypair, claiming ownership of that specific instance. The Asset persists on relays regardless of whether the game's servers continue operating.
 
@@ -106,7 +108,7 @@ Every Asset MUST include a `manifestation` tag referencing the parent Manifestat
 
 ```json
 {
-  "kind": 30052,
+  "kind": "<AEMS Asset kind>",
   "pubkey": "<owner_pubkey>",
   "tags": [
     ["d", "instance-7f3a9b2c"],
@@ -121,7 +123,7 @@ Every Asset MUST include a `manifestation` tag referencing the parent Manifestat
 
 ```json
 {
-  "kind": 30052,
+  "kind": "<AEMS Asset kind>",
   "pubkey": "<new_owner_pubkey>",
   "tags": [
     ["d", "instance-7f3a9b2c"],
@@ -133,7 +135,7 @@ Every Asset MUST include a `manifestation` tag referencing the parent Manifestat
 }
 ```
 
-### State (Kind 30053)
+### State
 
 **Mutable condition** of a specific Asset. State captures current hit points, remaining charges, enchantments, wear, or any other property that changes during play. State is deliberately separated from identity: the Asset records *what you own*; the State records *what condition it is in*.
 
@@ -141,7 +143,7 @@ Every State event MUST include an `asset` tag referencing the parent Asset.
 
 ```json
 {
-  "kind": 30053,
+  "kind": "<AEMS State kind>",
   "pubkey": "...",
   "tags": [
     ["d", "instance-7f3a9b2c"],
@@ -202,25 +204,13 @@ Nostr is not an interchangeable transport layer. It is the commons infrastructur
 
 ## Getting Started
 
-1. **Define an Entity** — Publish a kind 30050 event to any Nostr relay. Use a descriptive `d`-tag as the identifier.
-2. **Discover Entities** — Query relays for kind 30050 events to find universal archetypes published by the community.
-3. **Create a Manifestation** — Publish a kind 30051 event referencing an Entity for your game, with game-specific properties.
-4. **Claim an Asset** — When a player acquires an item, publish a kind 30052 event signed by the player's keypair.
-5. **Track State** — Update mutable properties via kind 30053 events referencing the Asset.
+1. **Define an Entity** — Publish an Entity event to any Nostr relay. Use a descriptive `d`-tag as the identifier.
+2. **Discover Entities** — Query relays for Entity events to find universal archetypes published by the community.
+3. **Create a Manifestation** — Publish a Manifestation event referencing an Entity for your game, with game-specific properties.
+4. **Claim an Asset** — When a player acquires an item, publish an Asset event signed by the player's keypair.
+5. **Track State** — Update mutable properties via State events referencing the Asset.
 
 For tag conventions, property naming patterns, and domain-specific examples, see [AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions).
-
----
-
-## Migration from Previous Versions
-
-> **Note**: Kinds 30001–30003 were previously used but conflict with NIP-51 (Lists). Kinds 30050–30053 are the current AEMS allocations.
-
-If migrating from earlier implementations:
-- 30001 → 30050 (Entity)
-- 30002 → 30051 (Manifestation)
-- 30003 → 30052 (Asset)
-- 30078 → 30053 (State)
 
 ---
 
