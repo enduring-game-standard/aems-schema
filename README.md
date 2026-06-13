@@ -1,145 +1,102 @@
 # AEMS: Asset-Entity-Manifestation-State
 
-**Durable, community-owned game entities — built on Nostr, designed to outlast their creators.**
+**A standard schema for game content on a public commons — four signed event kinds linked by a provenance chain.**
 
-Conceptual, 2026-01-21
+Conceptual, 2026-06-12
 
 🏠 **[EGS Overview](https://github.com/enduring-game-standard)** · 📦 **[AEMS](https://github.com/enduring-game-standard/aems-schema)** · 🎯 **[AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions)** · 🔧 **[RUNS](https://github.com/enduring-game-standard/runs-spec)** · 📖 **[RUNS Library](https://github.com/enduring-game-standard/runs-library)** · ⚡ **[WOCS](https://github.com/enduring-game-standard/wocs-protocol)** · 🎼 **[MAPS](https://github.com/enduring-game-standard/maps-notation)** · 🎶 **[MAPS Library](https://github.com/enduring-game-standard/maps-library)** · ❓ **[FAQ](https://github.com/enduring-game-standard/.github/blob/main/profile/FAQ.md)** · 🔤 **[Glossary](https://github.com/enduring-game-standard/.github/blob/main/profile/README.md#glossary)**
 
 ---
 
-## The Problem
+## What the Standard Defines
 
-Game entities die with the studios that create them. When a server shuts down, a player's inventory vanishes. When a publisher discontinues a title, the characters, weapons, and currencies that players invested hundreds of hours acquiring become inaccessible. Blockchain-based approaches introduced token-based ownership but brought their own fragilities: discretionary supply, platform-dependent liquidity, and reliance on specific chains that may themselves disappear.
+AEMS defines four event kinds and the provenance chain between them — and nothing more.
 
-AEMS takes a different approach. It defines game entities as plain, signed Nostr events that persist on open relays without fees, chains, or central authorities. Entities are structured in four layers that separate the universal concept from its game-specific interpretation, player ownership, and mutable state. The result is a minimal protocol for game entities that any client can read, any game can import, and any community can maintain — regardless of whether the original creator is still operating.
+- **Four addressable event kinds** — Entity, Manifestation, Asset, State. (The acronym's letter order is phonetic — "aims" — and carries no structural meaning.)
+- **Three reference edges** — every Manifestation references at least one Entity; every Asset references its Manifestation; every State references its Asset.
+- **Addressability** — each event is identified by its publisher's key and a `d`-tag; for a given key and `d`-tag, the latest event is current.
 
----
+Compliance is exactly this. What events *carry* — tag vocabularies, property shapes, naming patterns, transfer patterns — is deliberately out of scope. The standard defines structure; [AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions) recommends shared vocabularies for interoperability; the published events themselves are the ecosystem.
 
-## Core Premise
-
-A sword is not a product. It is a concept that predates any game containing it. Every RPG that features swords shares an archetype; what differs is the interpretation. The same is true of health potions, playing cards, chess pieces, and every other entity that appears across multiple games.
-
-AEMS treats game entities as community-defined roles rather than author-locked tokens. A "Health Potion" is a universal role — a named concept — that anyone can publish and any game can reference. Dark Souls interprets it as an Estus Flask. Final Fantasy VII interprets it as a Potion. Minecraft interprets it as a Splash Potion. Each interpretation is a game-specific Manifestation of the same underlying Entity. The role belongs to no one and is available to everyone.
-
-This is possible because AEMS entities are [Nostr](https://nostr.com) events — published to open relays, discoverable by anyone with a relay connection, forkable without permission, and persistent without any single relay's cooperation. Nostr is not an implementation detail. It is the commons that makes AEMS entities findable, composable, and durable. The same properties that make Nostr a credible social protocol — cryptographic identity, relay-distributed persistence, plain-text readability — make it a credible substrate for game entities that must outlast their creators.
-
----
-
-## A Concrete Example
-
-A community publishes a **Sword** Entity event to Nostr relays: a universal archetype with a name, category, and description. The Entity belongs to no studio. Anyone can discover it by querying relays for Entity events.
-
-Studio A builds an action RPG and publishes a **Manifestation** of the Sword Entity: a "Flameblade" with 120 base damage, a fire enchantment, and custom visual properties specific to their game. Studio B builds a survival game and publishes a different Manifestation of the same Sword Entity: a "Rustic Blade" with durability mechanics and crafting requirements. Both Manifestations reference the same underlying Entity.
-
-A player in Studio A's game earns a Flameblade by completing a quest. The game publishes an **Asset** event signed by the player's Nostr keypair, recording ownership of that specific instance.
-
-Studio A closes. Its servers go dark.
-
-The player's Asset event is still on Nostr relays. Studio B's game can read it, recognize the Sword Entity reference, and offer the player an equivalent Rustic Blade, or a community-built client can display the full provenance chain: Entity → Manifestation → Asset. The player's item persists because it was never stored on Studio A's servers. It was published to a commons that no single party controls.
+> **Note**: Concrete kind numbers and the exact parent-reference encoding are deliberately not yet pinned; they will be formalized against real relay usage. Examples use named placeholders.
 
 ---
 
 ## The Four Layers
 
-AEMS defines a four-layer hierarchy. Each layer is a Nostr addressable event with its own dedicated event kind, identified by its publisher's public key and a `d`-tag.
-
-> **Note**: The concrete Nostr kind numbers are deliberately not yet assigned. Allocations are deferred until they are formalized against real relay usage; until then, examples use named placeholders such as `"<AEMS Entity kind>"`.
-
 ```
-Entity → Manifestation → Asset → State
-  ↓           ↓            ↓        ↓
-universal   game-spec    player    mutable
-archetype   interpret    instance  condition
+Entity  →  Manifestation  →  Asset   →  State
+  ↓             ↓              ↓           ↓
+naming of    a game's       signed      claimed
+a concept    interpretation possession  condition
 ```
+
+Each event is signed by its publisher and references its parent, so the full chain from any State back to a named concept is always checkable.
 
 ### Entity
 
-A **named role** — an IP-agnostic concept that exists independently of any game. Entities are maintained by communities, not studios. An Entity names what something IS in universal terms: "Sword," "Health Potion," "Monster." Any Nostr user can publish an Entity; the protocol imposes no registry and no gatekeeping. Entities carry no grouping tags — only a `d`-tag identifier, a human-readable `name`, and a plain-language description.
+A signed **naming of a concept** — a dictionary entry, not the word. The concept ("Sword," "Health Potion," "Monster") belongs to no one; the event names it so that games can reference it. Anyone can publish an Entity. Rival namings of the same concept can coexist; convergence happens by reference — by which naming Manifestations actually cite — not by registry.
+
+The concept a naming points at outlasts any publisher, the way the Knight has outlasted every manufacturer that ever carved one.
 
 ```json
 {
   "kind": "<AEMS Entity kind>",
-  "pubkey": "...",
+  "pubkey": "<namer>",
   "tags": [
-    ["d", "health-potion"],
-    ["name", "Health Potion"]
+    ["d", "health-potion"]
   ],
-  "content": {
-    "description": "Restores vitality when used"
-  }
+  "content": "..."
 }
 ```
 
-Entities use parameterized replacement: for a given `pubkey` and `d`-tag, relays store only the latest version, allowing community evolution without losing identity.
+Entities are addressable: for a given `pubkey` and `d`-tag, the latest event is current, so an author can refine their own naming without losing its identity.
 
 ### Manifestation
 
-A **game-specific implementation** of one or more Entities. How a particular game interprets, expresses, and balances the universal role. Every Manifestation MUST include at least one `entity` tag referencing a parent Entity. A Manifestation may reference multiple Entities, declaring all the roles the game object participates in.
+A game's **interpretation** of one or more Entities — how a particular game expresses and balances the named concept. Staunton's Knight and a themed set's Knight are both interpretations of the same piece: each interpretation belongs to its maker; the piece belongs to neither.
 
-A Manifestation is the layer that a RUNS build process compiles into type definitions: it provides the concrete properties that Processors act on at runtime. Manifestations are resolved at build time, not queried per-frame.
+Every Manifestation MUST reference at least one parent Entity. Referencing several declares all the roles the game object participates in.
 
 ```json
 {
   "kind": "<AEMS Manifestation kind>",
-  "pubkey": "...",
+  "pubkey": "<interpreter>",
   "tags": [
-    ["d", "rpg-adventure:potion"],
-    ["entity", "<entity_event_id>", "health-potion"],
-    ["category", "consumable"],
-    ["type", "healing"],
-    ["property", "restore_amount", "100", "integer"],
-    ["property", "stack_limit", "50", "integer"]
+    ["d", "red-potion"],
+    ["entity", "<entity reference>"]
   ],
-  "content": {
-    "game": "RPG Adventure",
-    "name": "Vitality Elixir"
-  }
+  "content": "..."
 }
 ```
 
-Different games create different Manifestations of the same Entity. A "Health Potion" Entity might become a "Flask" in Dark Souls, a "Potion" in Final Fantasy VII, or a "Splash Potion" in Minecraft. Each Manifestation inherits the archetype and adapts it.
+Different games interpret the same Entity differently — one publisher's "Health Potion" becomes another game's flask and a third game's splash potion — and every interpretation references the naming it descends from.
 
 ### Asset
 
-A **player-owned instance** of a Manifestation. When a player acquires an item, they publish an Asset event signed by their own Nostr keypair, claiming ownership of that specific instance. The Asset persists on relays regardless of whether the game's servers continue operating.
+A signed **claim of possession** of one instance of a Manifestation, published with the owner's key. Twelve flasks in a player's bag are twelve Assets of one Manifestation. The event persists on the commons regardless of whether any game's servers continue operating — the figure on the shelf belongs to whoever holds it.
 
-Every Asset MUST include a `manifestation` tag referencing the parent Manifestation.
-
-```json
-{
-  "kind": "<AEMS Asset kind>",
-  "pubkey": "<owner_pubkey>",
-  "tags": [
-    ["d", "instance-7f3a9b2c"],
-    ["manifestation", "<manifestation_id>", "rpg-adventure:potion"],
-    ["acquired", "1706886400"]
-  ],
-  "content": {}
-}
-```
-
-**Ownership transfers** are accomplished by the new owner publishing an updated Asset event with the same `d`-tag, referencing the previous owner for provenance:
+Every Asset MUST reference its parent Manifestation; the Entity is reached up the chain.
 
 ```json
 {
   "kind": "<AEMS Asset kind>",
-  "pubkey": "<new_owner_pubkey>",
+  "pubkey": "<owner>",
   "tags": [
     ["d", "instance-7f3a9b2c"],
-    ["manifestation", "<manifestation_id>", "rpg-adventure:potion"],
-    ["prev_owner", "<old_owner_pubkey>"],
-    ["e", "<previous_asset_event_id>"]
+    ["manifestation", "<manifestation reference>"]
   ],
-  "content": {}
+  "content": "..."
 }
 ```
+
+Possession claims are auditable, not adjudicated: a claim's weight is its provenance chain, and whoever is asked to honor a claim judges it — the way the art world authenticates by chain of custody rather than by locks on frames.
 
 ### State
 
-**Mutable condition** of a specific Asset. State captures current hit points, remaining charges, enchantments, wear, or any other property that changes during play. State is deliberately separated from identity: the Asset records *what you own*; the State records *what condition it is in*.
+The **claimed current condition** of a single Asset — what changes during play: charges remaining, durability, wear. The latest State event for an Asset is its current condition; earlier events are its history. Condition travels with the Asset, not with any game — the chip on the Knight's ear stays with the piece.
 
-Every State event MUST include an `asset` tag referencing the parent Asset.
+Every State MUST reference its parent Asset.
 
 ```json
 {
@@ -147,78 +104,79 @@ Every State event MUST include an `asset` tag referencing the parent Asset.
   "pubkey": "...",
   "tags": [
     ["d", "instance-7f3a9b2c"],
-    ["asset", "<asset_event_id>", "instance-7f3a9b2c"],
-    ["property", "charges_remaining", "3", "integer"],
-    ["property", "condition", "0.75", "float"],
-    ["property", "custom_paint", "daughter-art-2026", "string"]
+    ["asset", "<asset reference>"]
   ],
-  "content": {}
+  "content": "..."
 }
 ```
 
-State is updated by publishing new events. The most recent event for a given `d`-tag represents the current condition.
+---
+
+## The Provenance Chain
+
+Every AEMS event is a **claim by its signer**: a naming (Entity), an interpretation (Manifestation), a possession (Asset), a condition (State). The standard makes claims persistent, attributable, and auditable; it does not make them true. Reading a chain tells you who published what, of what, and when. What to honor is the reader's decision: a game decides which namings it recognizes and which provenance it accepts — a design decision, not a technical constraint.
+
+This is the structure that authenticates physical artifacts: provenance, not enforcement. The [PWNS](https://github.com/enduring-game-standard/.github/blob/main/profile/PWNS.md) extension builds on it for authored works — covenants, attribution, first-experience economics.
+
+---
+
+## A Worked Example
+
+A community member publishes a **Sword** Entity. Studio A publishes a **Manifestation** — its "Flameblade" — referencing that Entity. A player earns one, and an **Asset** signed by the player's key records the instance. Play wears it down; **State** events record its condition.
+
+Studio A later shuts down. The events remain on the commons. Studio B's game reads the player's Asset, follows its chain up to the Sword Entity, recognizes the naming, and offers its own interpretation — or a community client simply displays the full chain. Nothing about the player's sword lived on Studio A's servers.
 
 ---
 
 ## What AEMS Deliberately Excludes
 
-AEMS is deliberately minimal. It defines four event kinds, their structural relationships, and nothing more. This restraint ensures AEMS remains neutral infrastructure, not a platform.
+AEMS defines four event kinds, their reference edges, and nothing more.
 
 | Excluded | Why | Where It Belongs |
 |----------|-----|------------------|
-| Databases/indexing | Protocol defines structure, not storage | Relay operators, clients |
-| Marketplaces | Protocol enables transfers, not commerce | Third-party platforms, coordination layers |
-| Validation logic | Protocol defines events, not rules | Game-specific Manifestations |
-| Rendering | Protocol describes entities, not how they look | Game clients, visual engines |
-| Namespacing/registries | Protocol is permissionless | Community convention, reputation |
-| Rich metadata standards | Protocol is minimal | [AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions), application-layer schemas |
-| Composites/hierarchies | Protocol defines atoms, not molecules | Application-layer composition |
+| Databases/indexing | The standard defines structure, not storage | Relay operators, clients |
+| Marketplaces | The standard enables transfer claims, not commerce | Third-party platforms, coordination layers |
+| Validation/adjudication | Events are claims; honoring them is the reader's judgment | Games, communities, reputation services |
+| Rendering | The standard describes things, not how they look | Game clients, visual engines |
+| Registries/namespacing | Convergence happens by reference, not by authority | Community convention, reputation |
+| Rich metadata standards | The standard is silent beyond structure | [AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions) |
+| Composites/hierarchies | The standard defines atoms, not molecules | Application-layer composition |
 
-Higher-layer conventions — visual properties, composition rules, domain-specific schemas — belong in separate, optional community profiles. The [AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions) companion provides recommended community conventions for interoperable implementations, including universal tag conventions (mandatory `entity` tags, namespacing via `d`-tags, consistent property naming), the IP Boundary Principle, and domain-specific examples.
+The boundary: if a detail concerns *what games should agree on* rather than *what the structure requires*, it belongs in [conventions](https://github.com/enduring-game-standard/aems-conventions).
 
-The boundary: the **standard** defines the four event kinds and their structural relationships. **Conventions** recommend how to use them interoperably. If a detail concerns *what games should agree on* rather than *what the protocol requires*, it belongs in conventions.
+---
+
+## Infrastructure
+
+AEMS events are [Nostr](https://nostr.com) events. Nostr provides the properties the schema relies on: signed authorship (every event verifiable against its publisher's key), relay-distributed persistence (no single server's failure destroys the data), permissionless discovery (anyone can query for events by kind), and addressable replacement (latest-wins identity per key and `d`-tag). It is not an interchangeable transport layer: no other protocol currently provides these properties as plain text, without importing the costs of monetary consensus.
 
 ---
 
 ## Ecosystem Connections
 
-AEMS is one protocol in a four-protocol architecture; the full topology is owned by the [EGS correspondence map](https://github.com/enduring-game-standard/.github/blob/main/profile/CORRESPONDENCE.md). AEMS's own edges:
+AEMS is one of four independent EGS protocols; the [correspondence map](https://github.com/enduring-game-standard/.github/blob/main/profile/CORRESPONDENCE.md) owns the full topology. AEMS's own edges:
 
-### AEMS → RUNS
-
-AEMS defines the *things*. [RUNS](https://github.com/enduring-game-standard/runs-spec) defines the *game* — the composable source that implements how things behave. At build time, AEMS Manifestations are compiled into type definitions and lookup tables that Processors reference. At load/save boundaries, AEMS Asset and State events persist player data to the commons. The relationship spans the full lifecycle: AEMS provides the entity definitions that RUNS source implements, and the persistence layer that preserves player state across sessions.
-
-### AEMS → WOCS
-
-[WOCS](https://github.com/enduring-game-standard/wocs-protocol) coordinates the *infrastructure* that sustains the ecosystem — server hosting, anti-cheat services, asset creation, tournament pooling, and any other coordination need. AEMS answers "what are the things?" WOCS answers "who coordinates the work that keeps the ecosystem running?"
-
-### AEMS → MAPS
-
-[MAPS Notation](https://github.com/enduring-game-standard/maps-notation) describes the *rules* of game mechanics. Where AEMS Entities define named roles (a sword, a monster), MAPS patterns describe the structural relationships those roles participate in (a resource-acquire pattern, a locked-transition arc). A designer notates the mechanical grammar in MAPS and instantiates the things in AEMS. Because both are open and discoverable, designers can study, fork, and extend each other's work across generations.
-
-### Why Nostr
-
-Nostr is not an interchangeable transport layer. It is the commons infrastructure that gives AEMS its structural properties. Entities published to Nostr relays are discoverable by anyone with a relay connection, forkable by anyone with a signing key, and persistent across relay redundancy without requiring any single operator's cooperation. These properties — permissionless discovery, cryptographic ownership, distributed persistence — are what make AEMS entities durable community infrastructure rather than another proprietary database.
+- **[RUNS](https://github.com/enduring-game-standard/runs-spec)** — AEMS defines the *things*; RUNS defines the *game*. Optional seams exist at build time (Manifestations compiled into type definitions) and at load/save boundaries (Asset and State events persisting player data). An AEMS Asset is not the runtime object a game manipulates per frame — AEMS is the shelf; RUNS is the board.
+- **[MAPS](https://github.com/enduring-game-standard/maps-notation)** — AEMS names the things; MAPS notates the mechanical structures those things participate in.
+- **[WOCS](https://github.com/enduring-game-standard/wocs-protocol)** — AEMS answers "what are the things?"; WOCS coordinates the work that keeps an ecosystem running.
 
 ---
 
 ## Getting Started
 
-1. **Define an Entity** — Publish an Entity event to any Nostr relay. Use a descriptive `d`-tag as the identifier.
-2. **Discover Entities** — Query relays for Entity events to find universal archetypes published by the community.
-3. **Create a Manifestation** — Publish a Manifestation event referencing an Entity for your game, with game-specific properties.
-4. **Claim an Asset** — When a player acquires an item, publish an Asset event signed by the player's keypair.
-5. **Track State** — Update mutable properties via State events referencing the Asset.
+1. **Publish an Entity** — a naming of a concept, identified by your key and a `d`-tag.
+2. **Discover Entities** — query relays for Entity events published by the community.
+3. **Publish a Manifestation** — your game's interpretation, referencing the Entity it descends from.
+4. **Publish an Asset** — when a player acquires an instance, signed by the player's key, referencing its Manifestation.
+5. **Publish State** — as the instance's condition changes, referencing its Asset.
 
-For tag conventions, property naming patterns, and domain-specific examples, see [AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions).
+For tag conventions, property naming, and domain examples, see [AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions).
 
 ---
 
-## The Larger Vision
+## The Deeper Argument
 
-AEMS exists because game entities should outlast the studios that create them. When a player earns a sword, that sword should persist the way a physical chess piece persists — not because a server keeps running, but because the entity was published to a commons that anyone can read and no one controls. And when a future game recognizes that sword's Entity reference and says "I know what a sword is," the item doesn't just survive — it transfers.
-
-This dual purpose — preservation and portability — is one piece of a larger structural argument. Patient capital makes open protocols economically rational. Durable substrate ensures the artifacts survive. Cumulative craft transmits the knowledge of how to build them well. AEMS contributes to durable substrate: entities stored as open, readable events on a distributed commons, composable across games, maintainable by communities. For the full argument, see the [Enduring Game Standard overview](https://github.com/enduring-game-standard).
+This README describes the schema. The *Enduring Games* book (unpublished) argues why — what physical game objects have always provided, and how the same separations carry into digital space. For the architecture-wide picture, see the [EGS overview](https://github.com/enduring-game-standard).
 
 ---
 
