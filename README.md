@@ -116,7 +116,7 @@ Every State MUST reference its parent Asset.
 
 Every AEMS event is a **claim by its signer**: a naming (Entity), an interpretation (Manifestation), a possession (Asset), a condition (State). The standard makes claims persistent, attributable, and auditable; it does not make them true. Reading a chain tells you who published what, of what, and when. What to honor is the reader's decision: a game decides which namings it recognizes and which provenance it accepts — a design decision, not a technical constraint.
 
-This is the structure that authenticates physical artifacts: provenance, not enforcement. The [PWNS](https://github.com/enduring-game-standard/.github/blob/main/profile/PWNS.md) extension builds on it for authored works — covenants, attribution, first-experience economics.
+This is the structure that authenticates physical artifacts: provenance, not enforcement. The [PWNS](https://github.com/enduring-game-standard/.github/blob/main/profile/PWNS.md) extension builds on it for authored works — covenants, anchored attribution, and an author-controlled openness dial over sealed content.
 
 ---
 
@@ -176,7 +176,7 @@ For tag conventions, property naming, and domain examples, see [AEMS Conventions
 
 ## The Deeper Argument
 
-This README describes the schema. The *Enduring Games* book (unpublished) argues why — what physical game objects have always provided, and how the same separations carry into digital space. For the architecture-wide picture, see the [EGS overview](https://github.com/enduring-game-standard).
+This README describes the schema. The compressed diagnosis it answers — why digital games die, in structural terms — is [WHY.md](https://github.com/enduring-game-standard/.github/blob/main/profile/WHY.md); the full argument is the book *Enduring Games: Patient Capital, Durable Substrate, and the Fix for an Industry That Eats Itself* (Scott Sheppard, 2026). For the architecture-wide picture, see the [EGS overview](https://github.com/enduring-game-standard).
 
 ---
 

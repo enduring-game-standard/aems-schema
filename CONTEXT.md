@@ -62,7 +62,7 @@ research, not by a lock on the frame. AEMS makes origin eternally verifiable —
 event is signed, every layer references its parent — so "who made this, and of what?"
 always has a checkable answer. Authenticity replaces scarcity: copying flows;
 *claiming* is refuted by the math. (PWNS extends this with covenants and
-first-experience economics.)
+an author-controlled openness dial over sealed content.)
 _Avoid_: scarcity, uniqueness, rarity, DRM, anti-copy
 
 ## Flagged ambiguities
