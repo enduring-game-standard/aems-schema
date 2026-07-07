@@ -176,7 +176,7 @@ For tag conventions, property naming, and domain examples, see [AEMS Conventions
 
 ## The Deeper Argument
 
-This README describes the schema. The *Enduring Games* book (unpublished) argues why — what physical game objects have always provided, and how the same separations carry into digital space. For the architecture-wide picture, see the [EGS overview](https://github.com/enduring-game-standard).
+This README describes the schema. The compressed diagnosis it answers — why digital games die, in structural terms — is [WHY.md](https://github.com/enduring-game-standard/.github/blob/main/profile/WHY.md); the full argument is the book *Enduring Games: Patient Capital, Durable Substrate, and the Fix for an Industry That Eats Itself* (Scott Sheppard, 2026). For the architecture-wide picture, see the [EGS overview](https://github.com/enduring-game-standard).
 
 ---
 
