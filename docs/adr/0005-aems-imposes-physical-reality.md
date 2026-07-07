@@ -36,7 +36,7 @@ Physical reality is the reference implementation. Five impositions:
    Vermeer is exposed by chain of custody, not by a lock on the frame. The chain of
    signed parent references imposes this digitally: copying flows; *claiming* is
    refuted by the math. → **the provenance chain itself** ([PWNS] extends this with
-   covenants and first-experience economics.)
+   covenants and an author-controlled openness dial over sealed content.)
 
 The fifth is stated as a positive that **replaces** uncopyability, not a refusal of it.
 Imposing scarcity digitally requires monetary-grade consensus — the blockchain category
