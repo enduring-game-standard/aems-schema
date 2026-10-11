@@ -152,7 +152,8 @@ def main():
         check_rules(path, text, rules)
     accepted = json.loads((SKILL / "accepted.json").read_text())
     def is_accepted(f):
-        return any(f["rule"] == a["rule"] and re.search(a["file"], f["file"]) for a in accepted)
+        return any(f["rule"] == a["rule"] and re.search(a["file"], f["file"])
+                   and a.get("match", "") in f["msg"] for a in accepted)
     held = [f for f in findings if is_accepted(f)]
     keep = set(args.only.split(",")) if args.only else None
     out = [f for f in findings if not is_accepted(f) and (keep is None or f["rule"] in keep)]
