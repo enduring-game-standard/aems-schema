@@ -14,7 +14,7 @@
 
 ## Driving it with check.py and the reader
 
-`check.py --only state-history,timestamp-proof,persistence-overclaim,tag-discovery`, then `reader-prompt.py <out> --feature substrate`.
+`check.py --only state-history,timestamp-proof,priority-proof,persistence-overclaim,tag-discovery`, then `reader-prompt.py <out> --feature substrate`.
 
 ## Gotchas
 
