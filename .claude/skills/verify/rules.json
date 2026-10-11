@@ -1,0 +1,272 @@
+[
+ {
+  "id": "asset-entity-edge",
+  "intent": "1",
+  "pattern": "Asset\\s*(→|->)\\s*Entity",
+  "unless": [
+   "no direct",
+   "never",
+   "not ",
+   "rejected",
+   "implies",
+   "transitively",
+   "Asset → Manifestation → Entity"
+  ],
+  "files": [
+   "."
+  ],
+  "except_files": [
+   "aems-schema/docs/adr/0002"
+  ],
+  "why": "an Asset references its Manifestation, never the Entity"
+ },
+ {
+  "id": "aems-imported",
+  "intent": "6",
+  "pattern": "MAPS\\s*(→|->)\\s*AEMS\\s*(→|->)\\s*RUNS|(import(ed|ing)?|load(ed)?) AEMS|AEMS (entities|entity|events|data) (can be |are )?import|imported into (RUNS|MAPS)|atop AEMS",
+  "unless": [
+   "not ",
+   "never",
+   "tempts",
+   "rejected"
+  ],
+  "files": [
+   "."
+  ],
+  "except_files": [
+   "aems-schema/docs/adr/0003"
+  ],
+  "why": "AEMS is independent; other protocols meet it only at optional seams"
+ },
+ {
+  "id": "kind-literal",
+  "intent": "5",
+  "pattern": "\\bkinds?\\s*:?\\s*\\(?3\\d{4}\\b|\"kind\":\\s*3\\d{4}",
+  "files": [
+   "^aems-",
+   "^\\.github/"
+  ],
+  "why": "AEMS kind numbers are not pinned"
+ },
+ {
+  "id": "canonical-artifact",
+  "intent": "5",
+  "pattern": "\\bcanonical\\b|\\bblessed\\b|\\bratified\\b",
+  "unless": [
+   "not ",
+   "never",
+   "nothing",
+   "no blessed",
+   "isn't",
+   "downstream",
+   "Canonical acronym",
+   "no privileged",
+   "becomes canonical",
+   "names a canonical",
+   "curation",
+   "none is",
+   "for coordination. Canonical"
+  ],
+  "files": [
+   "^aems-conventions/(?!docs/adr)",
+   "^aems-schema/(README|CONTEXT|INTENT)"
+  ],
+  "why": "nothing on the commons is canonical until use makes it so"
+ },
+ {
+  "id": "std-namespace",
+  "intent": "4",
+  "pattern": "\\bstd(card|deck)?:|universal entity definitions|community-ratified",
+  "unless": [
+   "no blessed",
+   "downstream",
+   "`std:` curation"
+  ],
+  "files": [
+   "."
+  ],
+  "except_files": [
+   "/docs/adr/"
+  ],
+  "why": "there is no blessed or standard namespace"
+ },
+ {
+  "id": "convention-mandate",
+  "intent": "5",
+  "pattern": "\\bmandatory\\b|\\bMUST\\b|\\brequired\\b",
+  "unless": [
+   "kernel",
+   "schema",
+   "not a convention",
+   "courtesy",
+   "never own",
+   "Mandatory for compliance",
+   "already requires",
+   "≠ mandatory"
+  ],
+  "files": [
+   "^aems-conventions/(?!docs/adr)"
+  ],
+  "why": "a conventions document never owns a MUST"
+ },
+ {
+  "id": "entity-ownerless-only",
+  "intent": "4",
+  "pattern": "IP-free|IP-agnostic|belongs to no one|universal,? (IP-free )?archetype|the concept itself|never for a trademarked",
+  "unless": [
+   "ownerless",
+   "misrepresentation",
+   "end of the gradient",
+   "not the definition"
+  ],
+  "files": [
+   "."
+  ],
+  "except_files": [
+   "/docs/adr/"
+  ],
+  "why": "an Entity may name an ownerless or an authored concept"
+ },
+ {
+  "id": "entity-is-role",
+  "intent": "4",
+  "pattern": "Entit(y|ies)[^.]{0,40}\\b(define|with a|expects)\\b[^.]{0,30}\\broles?\\b|declares all the roles|AEMS Entity with a `?\\w+`? role|\\(the named role",
+  "unless": [
+   "not ",
+   "never"
+  ],
+  "files": [
+   "."
+  ],
+  "except_files": [
+   "/docs/adr/"
+  ],
+  "why": "an Entity names object-identity; roles live on Manifestation tags"
+ },
+ {
+  "id": "state-history",
+  "intent": "7",
+  "pattern": "earlier (events|ones) are (its |auditable )?history|auditable history",
+  "unless": [
+   "only where",
+   "archiv",
+   "need not",
+   "not kept",
+   "may discard"
+  ],
+  "files": [
+   "."
+  ],
+  "except_files": [
+   "/docs/adr/"
+  ],
+  "why": "addressable replacement keeps no history; relays may discard older versions"
+ },
+ {
+  "id": "timestamp-proof",
+  "intent": "7",
+  "pattern": "timestamps? (and signature )?proves?|signature-plus-timestamp|born yesterday|chain is timestamped",
+  "unless": [
+   "created_at is",
+   "witness",
+   "self-asserted"
+  ],
+  "files": [
+   "."
+  ],
+  "except_files": [
+   "/docs/adr/"
+  ],
+  "why": "created_at is the signer's own claim; only witnesses prove age"
+ },
+ {
+  "id": "persistence-overclaim",
+  "intent": "7",
+  "pattern": "\\beternal(ly)?\\b(?! ?verif)|\\bforever\\b|\\bpermanent(ly)?\\b|never goes away|persists regardless|no single server's failure destroys",
+  "unless": [
+   "cannot be revoked",
+   "copies",
+   "re-host",
+   "outlive"
+  ],
+  "files": [
+   "^aems-schema/(README|CONTEXT|INTENT)",
+   "^aems-conventions/(?!docs/adr)"
+  ],
+  "why": "Nostr guarantees no persistence; events last while someone keeps a copy"
+ },
+ {
+  "id": "transfer-promise",
+  "intent": "5",
+  "pattern": "enables transfer claims|transfers countersigned",
+  "unless": [
+   "convention",
+   "where a"
+  ],
+  "files": [
+   "."
+  ],
+  "except_files": [
+   "/docs/adr/"
+  ],
+  "why": "no kernel rule or convention defines transfer yet"
+ },
+ {
+  "id": "retired-rubric",
+  "intent": "4",
+  "pattern": "four-test rubric|Substitution Test|Mechanical Signature",
+  "unless": [
+   "retired",
+   "retire"
+  ],
+  "files": [
+   "."
+  ],
+  "except_files": [
+   "aems-conventions/docs/adr/0002"
+  ],
+  "why": "the four-test rubric is retired (conventions ADR-0002)"
+ },
+ {
+  "id": "private-adr-label",
+  "intent": "-",
+  "pattern": "meta ADR-\\d+|RUNS ADR-001[45]|its ADR-0014",
+  "unless": [
+   "workspace"
+  ],
+  "files": [
+   "."
+  ],
+  "why": "these ADRs live in the private egs-workspace repo, not RUNS; say so"
+ },
+ {
+  "id": "avoided-term",
+  "intent": "1",
+  "pattern": "\\bre?skins?\\b|\\bvariants?\\b|game-specific implementation",
+  "unless": [
+   "_Avoid_",
+   "RUNS term",
+   "variant (a RUNS"
+  ],
+  "files": [
+   "^aems-schema/(README|CONTEXT|INTENT)",
+   "^aems-conventions/(?!docs/adr)"
+  ],
+  "why": "the AEMS glossary avoids skin, variant, implementation for Manifestations"
+ },
+ {
+  "id": "tag-discovery",
+  "intent": "7",
+  "pattern": "relay-quer(y|ied)|how a client queries relays|querying Manifestations by tag",
+  "unless": [
+   "single-letter",
+   "not relay",
+   "locally",
+   "indexed"
+  ],
+  "files": [
+   "^aems-conventions/(?!docs/adr)"
+  ],
+  "why": "relays index only single-letter tags; multi-letter tags are not relay-filterable"
+ }
+]
