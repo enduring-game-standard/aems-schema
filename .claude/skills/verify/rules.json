@@ -185,7 +185,7 @@
  {
   "id": "persistence-overclaim",
   "intent": "7",
-  "pattern": "\\beternal(ly)?\\b(?! ?verif)|\\bforever\\b|\\bpermanent(ly)?\\b|never goes away|persists regardless|no single server's failure destroys",
+  "pattern": "\\beternal(ly)?\\b(?! ?verif)|\\bforever\\b|\\bpermanent(ly)?\\b|never goes away|persists\\b[^.]{0,40}regardless|no single server's failure destroys|always checkable|commons-persisted|signed, persistent",
   "unless": [
    "cannot be revoked",
    "copies",
@@ -195,14 +195,15 @@
   ],
   "files": [
    "^aems-schema/(README|CONTEXT|INTENT)",
-   "^aems-conventions/(?!docs/adr)"
+   "^aems-conventions/(?!docs/adr)",
+   "^aems-schema/docs/adr/0010"
   ],
   "why": "Nostr guarantees no persistence; events last while someone keeps a copy"
  },
  {
   "id": "transfer-promise",
   "intent": "5",
-  "pattern": "enables transfer claims|transfers countersigned",
+  "pattern": "enables transfer claims|transfers countersigned|history of trades|transfer history",
   "unless": [
    "convention",
    "where a"
@@ -272,5 +273,29 @@
    "^aems-conventions/(?!docs/adr)"
   ],
   "why": "relays index only single-letter tags; multi-letter tags are not relay-filterable"
+ },
+ {
+  "id": "origin-overclaim",
+  "intent": "3",
+  "pattern": "(false (claim of )?origin|claiming) is (exposed|refuted) by the (chain|math)",
+  "files": [
+   "."
+  ],
+  "except_files": [
+   "/docs/adr/"
+  ],
+  "why": "a valid chain can carry a false claim; signatures expose only who signed"
+ },
+ {
+  "id": "two-part-address",
+  "intent": "5",
+  "pattern": "(identified|addressab\\w*) by (its |your |the )?(publisher's )?key and (a |the )?`?d`?[- ]tag|publisher key and `d` tag",
+  "files": [
+   "^aems-"
+  ],
+  "except_files": [
+   "/docs/adr/000"
+  ],
+  "why": "an address is kind, publisher key, and d tag"
  }
 ]
