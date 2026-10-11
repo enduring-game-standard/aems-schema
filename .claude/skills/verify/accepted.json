@@ -4,10 +4,5 @@
   "file": ".",
   "reason": "maps-library is private; the EGS-wide nav roster is an org decision outside this AEMS pass",
   "match": "maps-library"
- },
- {
-  "rule": "link-missing",
-  "file": "^\\.github/profile/STATUS.md",
-  "reason": "RECORD_SCHEMA.md is a RUNS doc referenced by open PR #1; not AEMS"
  }
 ]
