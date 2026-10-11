@@ -18,7 +18,7 @@ AEMS defines four event kinds and the provenance chain between them — and noth
 
 Compliance is exactly this. What events *carry* — tag vocabularies, property shapes, naming patterns, transfer patterns — is deliberately out of scope. The standard defines structure; [AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions) recommends shared vocabularies for interoperability; the published events themselves are the ecosystem.
 
-> **Note**: Concrete kind numbers and the exact parent-reference encoding are deliberately not yet pinned; they will be formalized against real relay usage. Examples use named placeholders, including the tag names `entity`, `manifestation`, and `asset`. [ADR-0010](./docs/adr/0010-what-the-substrate-guarantees.md) (proposed) records two constraints on that pinning: the kinds must be Nostr addressable kinds (30000-39999) for latest-wins to apply, and finding the references to an event on a relay needs a tag that relays index.
+> **Note**: Concrete kind numbers and the exact parent-reference encoding are deliberately not yet pinned; they will be formalized against real relay usage. Examples use named placeholders, including the tag names `entity`, `manifestation`, and `asset`. [ADR-0010](./docs/adr/0010-what-the-substrate-guarantees.md) records two constraints on that pinning: the kinds must be Nostr addressable kinds (30000-39999) for latest-wins to apply, and finding the references to an event on a relay needs a tag that relays index.
 
 ---
 

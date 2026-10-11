@@ -2,7 +2,7 @@
 
 - **Status:** Accepted. Founding assumption widened by the 2026-06-13 Amendment below —
   a concept may have an author-of-record; one Entity species along a commons↔authored
-  convergence gradient. [ADR-0010](./0010-what-the-substrate-guarantees.md) (proposed) would correct its
+  convergence gradient. [ADR-0010](./0010-what-the-substrate-guarantees.md) corrects its
   "signature-plus-timestamp prove the claim": a signature proves which key signed, and only
   witnesses can bound when.
 - **Date:** 2026-06-12

@@ -1,6 +1,6 @@
 # ADR-0006: Nostr is the substrate, not a transport choice
 
-- **Status:** Accepted. [ADR-0010](./0010-what-the-substrate-guarantees.md) (proposed) would correct "Unhosted existence" as a Nostr guarantee.
+- **Status:** Accepted. [ADR-0010](./0010-what-the-substrate-guarantees.md) corrects "Unhosted existence" as a Nostr guarantee.
 - **Date:** 2026-06-12
 - **Deciders:** Scott (+ Claude)
 - **Scope:** AEMS (substrate commitment; where unhosted existence comes from)

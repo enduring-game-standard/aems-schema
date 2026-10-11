@@ -1,6 +1,6 @@
 # ADR-0008: Possession is an auditable claim; the protocol never adjudicates
 
-- **Status:** Accepted. [ADR-0010](./0010-what-the-substrate-guarantees.md) (proposed) would correct its timestamp and transfer-evidence claims.
+- **Status:** Accepted. [ADR-0010](./0010-what-the-substrate-guarantees.md) corrects its timestamp and transfer-evidence claims.
 - **Date:** 2026-06-12
 - **Deciders:** Scott (+ Claude)
 - **Scope:** AEMS (what an Asset *is*; rejection of structural legitimacy)

@@ -1,9 +1,9 @@
 # ADR-0010: What Nostr guarantees, and what AEMS must not promise beyond it
 
-- **Status:** Proposed (drafted by Claude from a NIP audit; awaiting Scott's acceptance)
-- **Date:** 2026-10-10
-- **Deciders:** Scott (pending)
-- **Scope:** AEMS (the substrate facts the kernel relies on; would amend ADR-0002, ADR-0005, ADR-0006, ADR-0007, ADR-0008, ADR-0009)
+- **Status:** Accepted
+- **Date:** 2026-10-10 (accepted 2026-10-11)
+- **Deciders:** Scott (+ Claude)
+- **Scope:** AEMS (the substrate facts the kernel relies on; amends ADR-0002, ADR-0005, ADR-0006, ADR-0007, ADR-0008, ADR-0009)
 
 ## Context
 
