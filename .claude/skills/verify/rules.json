@@ -297,5 +297,18 @@
    "/docs/adr/000"
   ],
   "why": "an address is kind, publisher key, and d tag"
+ },
+ {
+  "id": "priority-proof",
+  "intent": "3",
+  "pattern": "\\b(prov(es|en|ing)|proof of|secures?)\\b[^;,.]{0,50}\\bpriority\\b|\\bprov(es|en|ing) who published|nobody can rewind|published it first|who was first|made it first|existed earlier|whose \\w+ (came|existed) first",
+  "files": [
+   "^\\.github/",
+   "^aems-"
+  ],
+  "except_files": [
+   "/docs/adr/000"
+  ],
+  "why": "a signature proves which key signed; an anchor shows only existence by a time, to readers who trust it (ADR-0010 decision 5)"
  }
 ]

@@ -74,6 +74,8 @@ def check_links(path, text):
                 if repo not in PUBLIC_REPOS:
                     find("link-private", path, n, f"links to {repo}, which is not a public repo: {url}")
                     continue
+                if re.match(r"(pull|issues)/\d+", sub):
+                    continue
                 sub = re.sub(r"^(blob|tree)/main/?", "", sub)
                 local = EGS / repo / sub
             elif re.match(r"https?://", target):
