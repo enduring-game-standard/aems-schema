@@ -13,7 +13,7 @@
 
 ## Driving it with check.py and the reader
 
-`check.py --only example-no-d,example-no-parent,example-anonymous-signer,asset-entity-edge,kind-literal,convention-mandate,entity-grouping-tag`, then `reader-prompt.py <out> --feature kernel`.
+`check.py --only example-no-d,example-no-parent,example-anonymous-signer,asset-entity-edge,kind-literal,kind-placeholder,convention-mandate,entity-grouping-tag`, then `reader-prompt.py <out> --feature kernel`.
 
 ## Gotchas
 
