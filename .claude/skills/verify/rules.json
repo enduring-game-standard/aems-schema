@@ -247,7 +247,7 @@
  {
   "id": "avoided-term",
   "intent": "1",
-  "pattern": "\\bre?skins?\\b|\\bvariants?\\b|game-specific implementation",
+  "pattern": "\\b(re)?skins?\\b|\\bvariants?\\b|game-specific implementation",
   "unless": [
    "_Avoid_",
    "RUNS term",
