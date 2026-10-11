@@ -301,7 +301,7 @@
  {
   "id": "priority-proof",
   "intent": "3",
-  "pattern": "(prov(es|en|ing)|proof of)\\b[^;,.]{0,50}\\bpriority\\b|prov(es|en|ing) who published|nobody can rewind|published it first",
+  "pattern": "\\b(prov(es|en|ing)|proof of|secures?)\\b[^;,.]{0,50}\\bpriority\\b|\\bprov(es|en|ing) who published|nobody can rewind|published it first|who was first|made it first",
   "files": [
    "^\\.github/",
    "^aems-"
