@@ -18,7 +18,7 @@ AEMS defines four event kinds and the provenance chain between them — and noth
 
 Compliance is exactly this. What events *carry* — tag vocabularies, property shapes, naming patterns, transfer patterns — is deliberately out of scope. The standard defines structure; [AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions) recommends shared vocabularies for interoperability; the published events themselves are the ecosystem.
 
-> **Note**: Concrete kind numbers and the exact parent-reference encoding are deliberately not yet pinned; they will be formalized against real relay usage. Examples use named placeholders, including the tag names `entity`, `manifestation`, and `asset`. When the kinds are pinned, they will be Nostr addressable kinds (30000-39999), and the parent reference will use a tag that relays index ([ADR-0010](./docs/adr/0010-what-the-substrate-guarantees.md)).
+> **Note**: Concrete kind numbers and the exact parent-reference encoding are deliberately not yet pinned; they will be formalized against real relay usage. Examples use named placeholders, including the tag names `entity`, `manifestation`, and `asset`. [ADR-0010](./docs/adr/0010-what-the-substrate-guarantees.md) (proposed) records two constraints on that pinning: the kinds must be Nostr addressable kinds (30000-39999) for latest-wins to apply, and finding the references to an event on a relay needs a tag that relays index.
 
 ---
 
@@ -32,9 +32,9 @@ A chess Knight survives the bankruptcy of every company that ever carved one. No
 4. Condition travels with the object. That is the **State**.
 5. Origin travels with the object. That is the **provenance chain** itself.
 
-The fifth replaces scarcity. Copying is free, and a false claim of origin is exposed by the chain. AEMS does not prevent duplication, on purpose: enforcing scarcity would need monetary-grade consensus, and a game object is an identity to recognize, not a coin to spend.
+Four layers carry the first four. The chain carries the fifth, and it replaces scarcity. Copying is free. No one can sign with a key they do not hold, so a false claim about who made an event fails; a claim about what happened is weighed by whoever reads it. AEMS does not prevent duplication, on purpose: enforcing scarcity would need monetary-grade consensus, and a game object is an identity to recognize, not a coin to spend.
 
-The same test decides what AEMS leaves out. A feature belongs in AEMS only if physical reality bundles it into the object itself ([ADR-0005](./docs/adr/0005-aems-imposes-physical-reality.md)).
+This gives a membership test: a feature belongs in AEMS only if physical reality bundles it into the object itself ([ADR-0005](./docs/adr/0005-aems-imposes-physical-reality.md)). The requirements every AEMS document answers to are in [INTENT.md](./INTENT.md).
 
 ---
 
@@ -47,7 +47,7 @@ naming of    a game's       signed      claimed
 a concept    interpretation possession  condition
 ```
 
-Each event is signed by its publisher and references its parent, so the full chain from any State back to a named concept is always checkable.
+Each event is signed by its publisher and references its parent, so the full chain from any State back to a named concept can be checked wherever its events are kept.
 
 ### Entity
 
@@ -92,7 +92,7 @@ Different games interpret the same Entity differently — one publisher's "Healt
 
 ### Asset
 
-A signed **claim of possession** of one instance of a Manifestation, published with the owner's key. Twelve flasks in a player's bag are twelve Assets of one Manifestation. The event persists on the commons regardless of whether any game's servers continue operating — the figure on the shelf belongs to whoever holds it.
+A signed **claim of possession** of one instance of a Manifestation, published with the owner's key. Twelve flasks in a player's bag are twelve Assets of one Manifestation. The event needs no game's servers: anyone can keep a copy, and it verifies wherever it lands — the figure on the shelf belongs to whoever holds it.
 
 Every Asset MUST reference its parent Manifestation; the Entity is reached up the chain.
 
@@ -108,15 +108,15 @@ Every Asset MUST reference its parent Manifestation; the Entity is reached up th
 }
 ```
 
-Possession claims are auditable, not adjudicated. Anyone can sign an Asset of any Manifestation, including one they never earned, and nothing in the protocol stops it. An earned Asset and a self-minted one can look the same as events. What separates them is evidence that others sign: a game's record of the acquisition, a witness, a history of trades. Whoever is asked to honor a claim weighs that evidence and decides — the way the art world authenticates by chain of custody rather than by locks on frames.
+Possession claims are auditable, not adjudicated. Anyone can sign an Asset of any Manifestation, including one they never earned, and nothing in the protocol stops it. An earned Asset and a self-minted one can look the same as events. What separates them is evidence that others sign, such as a game's signed record of the acquisition or a witness. Whoever is asked to honor a claim weighs that evidence and decides — the way the art world authenticates by chain of custody rather than by locks on frames.
 
 ### State
 
 The **claimed current condition** of a single Asset — what changes during play: charges remaining, durability, wear. Condition travels with the Asset, not with any game — the chip on the Knight's ear stays with the piece.
 
-A State is its signer's claim. The kernel does not say who signs it: the owner, the game that observed play, or anyone else. Each signer's latest State for an Asset is that signer's current claim. When several keys publish State for one Asset, the reader chooses whose claim to honor.
+A State is its signer's claim. The kernel does not say who signs it: the owner, the game that observed play, or anyone else. When several keys publish State for one Asset, the reader chooses whose claim to honor.
 
-Relays need keep only the latest event at each address. Earlier States survive only where someone archived them, or where the publisher gave each State its own `d`-tag.
+Relays need keep only the latest event at each address. A signer who keeps one `d`-tag per Asset therefore has one current State for it, and earlier versions survive only where someone archived them. A signer who gives each State its own `d`-tag keeps every version addressable, and the reader picks the latest by a `created_at` the signer chose.
 
 Every State MUST reference its parent Asset.
 
@@ -136,7 +136,7 @@ Every State MUST reference its parent Asset.
 
 ## The Provenance Chain
 
-Every AEMS event is a **claim by its signer**: a naming (Entity), an interpretation (Manifestation), a possession (Asset), a condition (State). The standard makes claims attributable and auditable; it does not make them true. Reading a chain tells you who signed what, and of what. An event's timestamp is part of its signer's claim; proof of when an event existed comes from witnesses, such as a third party's signed reference to it. What to honor is the reader's decision: a game decides which namings it recognizes and which provenance it accepts — a design decision, not a technical constraint.
+Every AEMS event is a **claim by its signer**: a naming (Entity), an interpretation (Manifestation), a possession (Asset), a condition (State). The standard makes claims attributable and auditable; it does not make them true. Reading a chain tells you who signed what, and of what. An event's timestamp is part of its signer's claim. Witnesses, such as a third party's signed reference to an event, can show it existed by some time, for readers who trust the witness. What to honor is the reader's decision: a game decides which namings it recognizes and which provenance it accepts — a design decision, not a technical constraint.
 
 This is the capability AEMS exists to provide, not a weakness to mitigate. It makes the digital pickup game possible. Nobody at the park rules on whose ball is legitimate; the players decide what equipment they accept. Strict equipment standards, like a league's match ball, are conventions a context adopts. The taped-up ball is still soccer ([ADR-0009](./docs/adr/0009-a-protocol-of-claims-never-facts.md)).
 
@@ -148,18 +148,19 @@ This is the structure that authenticates physical artifacts: provenance, not enf
 
 A community member publishes a **Sword** Entity. Studio A publishes a **Manifestation** — its "Flameblade" — referencing that Entity. A player earns one, and an **Asset** signed by the player's key records the instance. Play wears it down; **State** events record its condition.
 
-Studio A later shuts down. The events remain on relays and archives that Studio A never ran. Studio B's game reads the player's Asset, follows its chain up to the Sword Entity, recognizes the naming, and offers its own interpretation — or a community client simply displays the full chain. Nothing about the player's sword lived on Studio A's servers.
+Studio A later shuts down. Any relay or archive that kept the events still serves them, and none of them needs Studio A. Studio B's game reads the player's Asset, follows its chain up to the Sword Entity, recognizes the naming, and offers its own interpretation — or a community client simply displays the full chain. Nothing about the player's sword lived on Studio A's servers.
 
 ---
 
 ## What AEMS Deliberately Excludes
 
-AEMS defines four event kinds, their reference edges, and nothing more. Each exclusion below fails the membership test: physical reality does not bundle it into the object.
+AEMS defines four event kinds, their reference edges, and nothing more. Marketplaces, validation, and rendering fail the membership test (ADR-0005). The rest follow from the kernel declaring only shapes (ADR-0004).
 
 | Excluded | Why | Where It Belongs |
 |----------|-----|------------------|
 | Databases/indexing | The standard defines structure, not storage | Relay operators, clients |
-| Marketplaces and transfer | The standard defines neither commerce nor transfer. Transfer is an open conventions question | Conventions, third-party platforms, coordination layers |
+| Marketplaces | The standard enables claims, not commerce | Third-party platforms, coordination layers |
+| Transfer | No kernel rule defines it. An Asset's address includes its owner's key, so a transfer means a new Asset under the new owner's key | Conventions (none exists yet) |
 | Validation/adjudication | Events are claims; honoring them is the reader's judgment | Games, communities, reputation services |
 | Rendering | The standard describes things, not how they look | Game clients, visual engines |
 | Registries/namespacing | Convergence happens by reference, not by authority | Community convention, reputation |
@@ -176,8 +177,8 @@ AEMS events are [Nostr](https://nostr.com) events. Nostr provides the properties
 
 - **Signed authorship.** Every event verifies against its publisher's key, wherever a copy of it lands.
 - **No particular host.** Any relay or archive can hold an event, and anyone can copy it to another without the author's permission. No single server's failure destroys an event that others keep.
-- **Permissionless reading.** Anyone can query relays for events by kind and by author. Relays index single-letter tags only, so a filter on a multi-letter tag runs in the client after fetching.
-- **Addressable replacement.** At each address (kind, key, and `d`-tag), relays keep the latest event and may discard older versions.
+- **Reading without the author's permission.** Anyone can query relays for events by kind and by author, though a relay may charge or require a login. Single-letter tags are the only ones relays are expected to index, so a filter on a multi-letter tag generally runs in the client after fetching.
+- **Addressable replacement.** At each address (kind, key, and `d`-tag), a relay keeps the latest version it has received and may discard older ones. A reader sees the latest among the copies it fetched.
 
 Nostr does not guarantee that anyone keeps an event. An event lasts while the commons holds copies, the way a book lasts while libraries keep it, and keeping events alive is ecosystem work. An event's `created_at` is chosen by its signer and proves nothing on its own ([ADR-0010](./docs/adr/0010-what-the-substrate-guarantees.md)).
 
@@ -197,7 +198,7 @@ AEMS is one of four independent EGS protocols; the [correspondence map](https://
 
 ## Getting Started
 
-1. **Publish an Entity** — a naming of a concept, identified by your key and a `d`-tag.
+1. **Publish an Entity** — a naming of a concept, addressed by its kind, your key, and a `d`-tag.
 2. **Discover Entities** — query relays for Entity events published by the community.
 3. **Publish a Manifestation** — your game's interpretation, referencing the Entity it descends from.
 4. **Publish an Asset** — when a player acquires an instance, signed by the player's key, referencing its Manifestation.

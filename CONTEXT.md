@@ -42,7 +42,7 @@ differently per game. One Manifestation has many Assets.
 _Avoid_: skin, variant (a RUNS term), instance, implementation
 
 **Asset**:
-A signed, persistent *claim of possession* of one instance of a Manifestation —
+A signed *claim of possession* of one instance of a Manifestation —
 auditable through its provenance chain, never adjudicated by the protocol (ADR-0008).
 Whoever is asked to honor the claim judges it, the way provenance research — not a lock
 on the frame — exposes a forged painting. Twelve Flasks in your bag are twelve Assets
@@ -80,7 +80,7 @@ _Avoid_: scarcity, uniqueness, rarity, DRM, anti-copy
   game-specific version of an Entity. The thing you hold and that persists per-inventory
   is the **Asset**. Do not let the metaphor redefine the term.
 
-- **"Asset" vs. "in-game asset."** An AEMS Asset is the commons-persisted, owner-signed
+- **"Asset" vs. "in-game asset."** An AEMS Asset is the commons-held, owner-signed
   instance. It is **not** the runtime object a game manipulates per-frame (that is RUNS's
   concern). AEMS is the shelf; RUNS is the board.
 

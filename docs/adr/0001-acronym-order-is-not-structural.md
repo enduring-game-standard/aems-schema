@@ -11,7 +11,7 @@ AEMS expands to **A**sset-**E**ntity-**M**anifestation-**S**tate. Read as an ord
 list, that letter sequence invites the inference that it encodes the layers' structural
 order — their dependency chain, build order, or some narrative/phenomenological
 progression. It does not. The four letters are arranged to spell the phonetic game verb
-"aims" per EGS workspace ADR-0008 (private `egs-workspace` repo) (acronyms are phonetic game verbs; expansions are mnemonic, not
+"aims" per EGS workspace ADR-0008, in the private `egs-workspace` repo (acronyms are phonetic game verbs; expansions are mnemonic, not
 load-bearing). The ordering exists to make the word, nothing more.
 
 This keeps snagging readers — humans and AI assistants alike — who try to reconcile the
