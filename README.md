@@ -2,7 +2,7 @@
 
 **A standard schema for game content on a public commons — four signed event kinds linked by a provenance chain.**
 
-Conceptual, 2026-06-12
+Conceptual, 2026-10-10
 
 🏠 **[EGS Overview](https://github.com/enduring-game-standard)** · 📦 **[AEMS](https://github.com/enduring-game-standard/aems-schema)** · 🎯 **[AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions)** · 🔧 **[RUNS](https://github.com/enduring-game-standard/runs-spec)** · 📖 **[RUNS Library](https://github.com/enduring-game-standard/runs-library)** · ⚡ **[WOCS](https://github.com/enduring-game-standard/wocs-protocol)** · 🎼 **[MAPS](https://github.com/enduring-game-standard/maps-notation)** · 🎶 **[MAPS Library](https://github.com/enduring-game-standard/maps-library)** · ❓ **[FAQ](https://github.com/enduring-game-standard/.github/blob/main/profile/FAQ.md)** · 🔤 **[Glossary](https://github.com/enduring-game-standard/.github/blob/main/profile/README.md#glossary)**
 
@@ -14,11 +14,27 @@ AEMS defines four event kinds and the provenance chain between them — and noth
 
 - **Four addressable event kinds** — Entity, Manifestation, Asset, State. (The acronym's letter order is phonetic — "aims" — and carries no structural meaning.)
 - **Three reference edges** — every Manifestation references at least one Entity; every Asset references its Manifestation; every State references its Asset.
-- **Addressability** — each event is identified by its publisher's key and a `d`-tag; for a given key and `d`-tag, the latest event is current.
+- **Addressability** — each event's address is its kind, its publisher's key, and its `d`-tag. At each address, the latest event is current.
 
 Compliance is exactly this. What events *carry* — tag vocabularies, property shapes, naming patterns, transfer patterns — is deliberately out of scope. The standard defines structure; [AEMS Conventions](https://github.com/enduring-game-standard/aems-conventions) recommends shared vocabularies for interoperability; the published events themselves are the ecosystem.
 
-> **Note**: Concrete kind numbers and the exact parent-reference encoding are deliberately not yet pinned; they will be formalized against real relay usage. Examples use named placeholders.
+> **Note**: Concrete kind numbers and the exact parent-reference encoding are deliberately not yet pinned; they will be formalized against real relay usage. Examples use named placeholders, including the tag names `entity`, `manifestation`, and `asset`. When the kinds are pinned, they will be Nostr addressable kinds (30000-39999), and the parent reference will use a tag that relays index ([ADR-0010](./docs/adr/0010-what-the-substrate-guarantees.md)).
+
+---
+
+## Why Four Layers
+
+A chess Knight survives the bankruptcy of every company that ever carved one. Nobody designed that. Physical reality keeps the parts of a game object separate for free, and digital games fused them into one object that a single server hosts. AEMS imposes, in digital space, what physical reality gives a game object for free:
+
+1. The concept outlives every object and every maker. That is the **Entity**.
+2. Anyone may interpret the concept, and no interpretation captures it. That is the **Manifestation**.
+3. Possession belongs to whoever holds the object. That is the **Asset**.
+4. Condition travels with the object. That is the **State**.
+5. Origin travels with the object. That is the **provenance chain** itself.
+
+The fifth replaces scarcity. Copying is free, and a false claim of origin is exposed by the chain. AEMS does not prevent duplication, on purpose: enforcing scarcity would need monetary-grade consensus, and a game object is an identity to recognize, not a coin to spend.
+
+The same test decides what AEMS leaves out. A feature belongs in AEMS only if physical reality bundles it into the object itself ([ADR-0005](./docs/adr/0005-aems-imposes-physical-reality.md)).
 
 ---
 
@@ -35,7 +51,9 @@ Each event is signed by its publisher and references its parent, so the full cha
 
 ### Entity
 
-A signed **naming of a concept** — a dictionary entry, not the word. The concept ("Sword," "Health Potion," "Monster") belongs to no one; the event names it so that games can reference it. Anyone can publish an Entity. Rival namings of the same concept can coexist; convergence happens by reference — by which naming Manifestations actually cite — not by registry.
+A signed **naming of a concept** — a dictionary entry, not the word. The event names the concept so that games can reference it. Anyone can publish an Entity. Rival namings of the same concept can coexist; convergence happens by reference — by which naming Manifestations actually cite — not by registry.
+
+A concept may be ownerless, like "Sword," or have an author of record, like the Master Sword. Both are named by Entities, and the protocol treats them the same. For an authored concept, convergence concentrates on the author's naming because the world recognizes the author, not because the protocol requires it ([ADR-0007](./docs/adr/0007-an-entity-event-is-a-naming-not-the-concept.md)).
 
 The concept a naming points at outlasts any publisher, the way the Knight has outlasted every manufacturer that ever carved one.
 
@@ -50,13 +68,13 @@ The concept a naming points at outlasts any publisher, the way the Knight has ou
 }
 ```
 
-Entities are addressable: for a given `pubkey` and `d`-tag, the latest event is current, so an author can refine their own naming without losing its identity.
+Entities are addressable: at each address, the latest event is current, so an author can refine their own naming without losing its identity.
 
 ### Manifestation
 
 A game's **interpretation** of one or more Entities — how a particular game expresses and balances the named concept. Staunton's Knight and a themed set's Knight are both interpretations of the same piece: each interpretation belongs to its maker; the piece belongs to neither.
 
-Every Manifestation MUST reference at least one parent Entity. Referencing several declares all the roles the game object participates in.
+Every Manifestation MUST reference at least one parent Entity. Referencing several declares each concept the game object is, such as both the Master Sword and a sword.
 
 ```json
 {
@@ -90,18 +108,22 @@ Every Asset MUST reference its parent Manifestation; the Entity is reached up th
 }
 ```
 
-Possession claims are auditable, not adjudicated: a claim's weight is its provenance chain, and whoever is asked to honor a claim judges it — the way the art world authenticates by chain of custody rather than by locks on frames.
+Possession claims are auditable, not adjudicated. Anyone can sign an Asset of any Manifestation, including one they never earned, and nothing in the protocol stops it. An earned Asset and a self-minted one can look the same as events. What separates them is evidence that others sign: a game's record of the acquisition, a witness, a history of trades. Whoever is asked to honor a claim weighs that evidence and decides — the way the art world authenticates by chain of custody rather than by locks on frames.
 
 ### State
 
-The **claimed current condition** of a single Asset — what changes during play: charges remaining, durability, wear. The latest State event for an Asset is its current condition; earlier events are its history. Condition travels with the Asset, not with any game — the chip on the Knight's ear stays with the piece.
+The **claimed current condition** of a single Asset — what changes during play: charges remaining, durability, wear. Condition travels with the Asset, not with any game — the chip on the Knight's ear stays with the piece.
+
+A State is its signer's claim. The kernel does not say who signs it: the owner, the game that observed play, or anyone else. Each signer's latest State for an Asset is that signer's current claim. When several keys publish State for one Asset, the reader chooses whose claim to honor.
+
+Relays need keep only the latest event at each address. Earlier States survive only where someone archived them, or where the publisher gave each State its own `d`-tag.
 
 Every State MUST reference its parent Asset.
 
 ```json
 {
   "kind": "<AEMS State kind>",
-  "pubkey": "...",
+  "pubkey": "<claimant>",
   "tags": [
     ["d", "instance-7f3a9b2c"],
     ["asset", "<asset reference>"]
@@ -114,7 +136,9 @@ Every State MUST reference its parent Asset.
 
 ## The Provenance Chain
 
-Every AEMS event is a **claim by its signer**: a naming (Entity), an interpretation (Manifestation), a possession (Asset), a condition (State). The standard makes claims persistent, attributable, and auditable; it does not make them true. Reading a chain tells you who published what, of what, and when. What to honor is the reader's decision: a game decides which namings it recognizes and which provenance it accepts — a design decision, not a technical constraint.
+Every AEMS event is a **claim by its signer**: a naming (Entity), an interpretation (Manifestation), a possession (Asset), a condition (State). The standard makes claims attributable and auditable; it does not make them true. Reading a chain tells you who signed what, and of what. An event's timestamp is part of its signer's claim; proof of when an event existed comes from witnesses, such as a third party's signed reference to it. What to honor is the reader's decision: a game decides which namings it recognizes and which provenance it accepts — a design decision, not a technical constraint.
+
+This is the capability AEMS exists to provide, not a weakness to mitigate. It makes the digital pickup game possible. Nobody at the park rules on whose ball is legitimate; the players decide what equipment they accept. Strict equipment standards, like a league's match ball, are conventions a context adopts. The taped-up ball is still soccer ([ADR-0009](./docs/adr/0009-a-protocol-of-claims-never-facts.md)).
 
 This is the structure that authenticates physical artifacts: provenance, not enforcement. The [PWNS](https://github.com/enduring-game-standard/.github/blob/main/profile/PWNS.md) extension builds on it for authored works — covenants, anchored attribution, and an author-controlled openness dial over sealed content.
 
@@ -124,18 +148,18 @@ This is the structure that authenticates physical artifacts: provenance, not enf
 
 A community member publishes a **Sword** Entity. Studio A publishes a **Manifestation** — its "Flameblade" — referencing that Entity. A player earns one, and an **Asset** signed by the player's key records the instance. Play wears it down; **State** events record its condition.
 
-Studio A later shuts down. The events remain on the commons. Studio B's game reads the player's Asset, follows its chain up to the Sword Entity, recognizes the naming, and offers its own interpretation — or a community client simply displays the full chain. Nothing about the player's sword lived on Studio A's servers.
+Studio A later shuts down. The events remain on relays and archives that Studio A never ran. Studio B's game reads the player's Asset, follows its chain up to the Sword Entity, recognizes the naming, and offers its own interpretation — or a community client simply displays the full chain. Nothing about the player's sword lived on Studio A's servers.
 
 ---
 
 ## What AEMS Deliberately Excludes
 
-AEMS defines four event kinds, their reference edges, and nothing more.
+AEMS defines four event kinds, their reference edges, and nothing more. Each exclusion below fails the membership test: physical reality does not bundle it into the object.
 
 | Excluded | Why | Where It Belongs |
 |----------|-----|------------------|
 | Databases/indexing | The standard defines structure, not storage | Relay operators, clients |
-| Marketplaces | The standard enables transfer claims, not commerce | Third-party platforms, coordination layers |
+| Marketplaces and transfer | The standard defines neither commerce nor transfer. Transfer is an open conventions question | Conventions, third-party platforms, coordination layers |
 | Validation/adjudication | Events are claims; honoring them is the reader's judgment | Games, communities, reputation services |
 | Rendering | The standard describes things, not how they look | Game clients, visual engines |
 | Registries/namespacing | Convergence happens by reference, not by authority | Community convention, reputation |
@@ -148,7 +172,16 @@ The boundary: if a detail concerns *what games should agree on* rather than *wha
 
 ## Infrastructure
 
-AEMS events are [Nostr](https://nostr.com) events. Nostr provides the properties the schema relies on: signed authorship (every event verifiable against its publisher's key), relay-distributed persistence (no single server's failure destroys the data), permissionless discovery (anyone can query for events by kind), and addressable replacement (latest-wins identity per key and `d`-tag). It is not an interchangeable transport layer: no other protocol currently provides these properties as plain text, without importing the costs of monetary consensus.
+AEMS events are [Nostr](https://nostr.com) events. Nostr provides the properties the schema relies on:
+
+- **Signed authorship.** Every event verifies against its publisher's key, wherever a copy of it lands.
+- **No particular host.** Any relay or archive can hold an event, and anyone can copy it to another without the author's permission. No single server's failure destroys an event that others keep.
+- **Permissionless reading.** Anyone can query relays for events by kind and by author. Relays index single-letter tags only, so a filter on a multi-letter tag runs in the client after fetching.
+- **Addressable replacement.** At each address (kind, key, and `d`-tag), relays keep the latest event and may discard older versions.
+
+Nostr does not guarantee that anyone keeps an event. An event lasts while the commons holds copies, the way a book lasts while libraries keep it, and keeping events alive is ecosystem work. An event's `created_at` is chosen by its signer and proves nothing on its own ([ADR-0010](./docs/adr/0010-what-the-substrate-guarantees.md)).
+
+Nostr is not an interchangeable transport layer. We know of no other protocol that provides these properties as plain text without importing the costs of monetary consensus ([ADR-0006](./docs/adr/0006-nostr-is-the-substrate-not-a-transport-choice.md)).
 
 ---
 
