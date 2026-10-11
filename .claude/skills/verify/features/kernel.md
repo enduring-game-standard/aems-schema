@@ -17,5 +17,5 @@
 
 ## Gotchas
 
-- The example checker reads only fenced blocks whose `kind` is `<AEMS X kind>` or a number. A block with another placeholder is skipped silently.
+- The example checker reads only fenced blocks whose `kind` is `<AEMS X kind>` or a number. A block whose placeholder starts `<AEMS` in any other form is a `kind-placeholder` finding. A block with any other placeholder, such as a WOCS one, is skipped silently.
 - A conventions doc may restate a kernel MUST if it says so. The rule allows lines that mention the kernel or the schema.
