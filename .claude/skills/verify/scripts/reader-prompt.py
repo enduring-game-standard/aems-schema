@@ -10,7 +10,7 @@ DOCS = ["aems-schema/README.md", "aems-schema/CONTEXT.md", "aems-conventions/REA
 out = sys.argv[1]
 feat = sys.argv[3] if len(sys.argv) > 3 and sys.argv[2] == "--feature" else None
 qs = [q for q in json.loads((SKILL / "reader-questions.json").read_text()) if not feat or q["feature"] == feat]
-print(f"""You are a game developer reading the AEMS documentation for the first time. Read ONLY these files, in order, and nothing else (no ADRs, no INTENT.md, no git history, no web):
+print(f"""You are a game developer reading the AEMS documentation for the first time. Read ONLY these files, in order and in full (reading, not grepping), and nothing else (no ADRs, no INTENT.md, no git history, no web):
 {chr(10).join('- ' + str(EGS / d) for d in DOCS)}
 
 Answer each question from what these documents say. For each answer give: the answer in 1-3 sentences, the file:line you relied on, and `conflict` listing any lines in the documents that say something different (empty if none). If the documents do not answer, say "not answered".
