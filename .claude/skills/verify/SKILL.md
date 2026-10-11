@@ -36,7 +36,7 @@ Run from the aems-schema root. Put evidence in `$EGS/.aems-verify/<UTC timestamp
    .claude/skills/verify/scripts/check.py --json "$RUN/lint.json" | tee "$RUN/lint.txt"
    ```
 
-   It checks Markdown links and `#anchors` across the clones, unclosed code fences, every example event (a `d` tag, the parent reference its layer requires, no grouping tags on an Entity, no Asset-to-Entity edge, a named signer, no literal kind numbers), and the regex rules in `rules.json`. Each rule names the `INTENT.md` requirement it enforces. `accepted.json` lists findings held outside this corpus's scope, each with its reason, and the run prints their count. `--only rule-a,rule-b` narrows the output.
+   It checks Markdown links and `#anchors` across the clones, unclosed code fences, every example event (a `d` tag, the parent reference its layer requires, no grouping tags on an Entity, no Asset-to-Entity edge, a named signer, no literal kind numbers, and a placeholder kind written exactly `<AEMS Layer kind>` so the other checks can read it), and the regex rules in `rules.json`. Each rule names the `INTENT.md` requirement it enforces. `accepted.json` lists findings held outside this corpus's scope, each with its reason, and the run prints their count. `--only rule-a,rule-b` narrows the output.
 
 2. Cold reader. Spawn a fresh subagent with no prior context and give it the prompt this prints:
 
