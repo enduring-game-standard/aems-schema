@@ -1,6 +1,6 @@
 # ADR-0002: An Asset references its Manifestation, not the Entity directly
 
-- **Status:** Accepted
+- **Status:** Accepted. [ADR-0010](./0010-what-the-substrate-guarantees.md) corrects its "permanent Entity link" and "commons storage" persistence wording.
 - **Date:** 2026-06-12
 - **Deciders:** Scott (+ Claude)
 - **Scope:** AEMS (layer reference graph)

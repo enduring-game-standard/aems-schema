@@ -14,7 +14,7 @@ timestamp, a `prev_owner` transfer pattern, "Entities carry no grouping tags"), 
 worked-artifact detail. Each recommendation invited the same argument: is this rule
 right? — when the prior question was whether the schema should be ruling on it at all.
 
-RUNS resolved the identical tension (its ADR-0014, private meta repo): a **Protocol**
+RUNS resolved the identical tension (EGS workspace ADR-0014, private `egs-workspace` repo): a **Protocol**
 kernel that is mandatory and declares only *shapes of data for functionality*; a
 **Conventions** tier that is optional-but-recommended — the interop palette; an
 **Ecosystem** tier of community artifacts published to the commons. Compliance is the
@@ -38,7 +38,7 @@ kernel, nothing more.
 
 - Every content rule in the README either restates a provenance edge (stays) or exits
   to conventions. The schema is **silent** on what any layer carries beyond the chain;
-  the silence is deliberate, not an omission (cf. RUNS ADR-0015's posture).
+  the silence is deliberate, not an omission (cf. EGS workspace ADR-0015's posture).
 - Debates about event contents — e.g. *may an Entity carry tags?* — are conventions
   questions, out of this repo's scope by construction.
 - The provenance edges are kernel MUSTs. A conventions document cannot own a

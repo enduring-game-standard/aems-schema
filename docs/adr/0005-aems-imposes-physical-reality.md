@@ -1,6 +1,6 @@
 # ADR-0005: AEMS imposes physical reality; authenticity by provenance, not scarcity
 
-- **Status:** Accepted
+- **Status:** Accepted. [ADR-0010](./0010-what-the-substrate-guarantees.md) corrects "eternal provenance": a signature verifies wherever a copy is kept, and nothing guarantees a copy is kept.
 - **Date:** 2026-06-12
 - **Deciders:** Scott (+ Claude)
 - **Scope:** AEMS (the philosophy that defines the protocol; foundation for the README)
