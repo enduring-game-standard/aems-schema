@@ -11,7 +11,7 @@ AEMS expands to **A**sset-**E**ntity-**M**anifestation-**S**tate. Read as an ord
 list, that letter sequence invites the inference that it encodes the layers' structural
 order — their dependency chain, build order, or some narrative/phenomenological
 progression. It does not. The four letters are arranged to spell the phonetic game verb
-"aims" per meta ADR-0008 (acronyms are phonetic game verbs; expansions are mnemonic, not
+"aims" per EGS workspace ADR-0008 (private `egs-workspace` repo) (acronyms are phonetic game verbs; expansions are mnemonic, not
 load-bearing). The ordering exists to make the word, nothing more.
 
 This keeps snagging readers — humans and AI assistants alike — who try to reconcile the
@@ -42,6 +42,6 @@ treat "AEMS" purely as the name.
 ## Consequences
 
 - The recurring "but the letters are in the wrong order" churn is closed; it is not a bug.
-- Downstream of meta ADR-0008; this is the AEMS-local application of that family rule.
+- Downstream of EGS workspace ADR-0008; this is the AEMS-local application of that family rule.
 - Documentation introduces the layers in their schema-defined order and never apologizes
   for, or rationalizes, the acronym order.

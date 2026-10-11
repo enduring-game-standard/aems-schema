@@ -2,7 +2,8 @@
 
 - **Status:** Accepted. Founding assumption widened by the 2026-06-13 Amendment below —
   a concept may have an author-of-record; one Entity species along a commons↔authored
-  convergence gradient.
+  convergence gradient. Its "signature-plus-timestamp prove the claim" is corrected by
+  [ADR-0010](./0010-what-the-substrate-guarantees.md) (proposed): a signature proves who; only witnesses prove when.
 - **Date:** 2026-06-12
 - **Deciders:** Scott (+ Claude)
 - **Scope:** AEMS (what the Entity layer *is*; rejection of the registry model)

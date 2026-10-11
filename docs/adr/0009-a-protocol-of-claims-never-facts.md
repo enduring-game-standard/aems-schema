@@ -1,6 +1,6 @@
 # ADR-0009: A protocol of claims, never facts — the digital pickup game
 
-- **Status:** Accepted
+- **Status:** Accepted. "Claims are eternal" is corrected by [ADR-0010](./0010-what-the-substrate-guarantees.md) (proposed).
 - **Date:** 2026-06-12
 - **Deciders:** Scott (+ Claude)
 - **Scope:** AEMS (the claims model generalized to all four layers; the paradigm it serves)
