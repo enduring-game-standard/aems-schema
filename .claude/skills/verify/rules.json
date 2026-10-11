@@ -48,7 +48,8 @@
   ],
   "why": "AEMS kind numbers are not pinned",
   "unless": [
-   "30000-39999"
+   "30000-39999",
+   "NIP-51"
   ]
  },
  {
@@ -195,8 +196,7 @@
   ],
   "files": [
    "^aems-schema/(README|CONTEXT|INTENT)",
-   "^aems-conventions/(?!docs/adr)",
-   "^aems-schema/docs/adr/0010"
+   "^aems-conventions/(?!docs/adr)"
   ],
   "why": "Nostr guarantees no persistence; events last while someone keeps a copy"
  },
