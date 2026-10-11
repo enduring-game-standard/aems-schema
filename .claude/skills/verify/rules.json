@@ -46,7 +46,10 @@
    "^aems-",
    "^\\.github/"
   ],
-  "why": "AEMS kind numbers are not pinned"
+  "why": "AEMS kind numbers are not pinned",
+  "unless": [
+   "30000-39999"
+  ]
  },
  {
   "id": "canonical-artifact",
@@ -187,7 +190,8 @@
    "cannot be revoked",
    "copies",
    "re-host",
-   "outlive"
+   "outlive",
+   "that others keep"
   ],
   "files": [
    "^aems-schema/(README|CONTEXT|INTENT)",
