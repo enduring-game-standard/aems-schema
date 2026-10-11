@@ -2,7 +2,8 @@
  {
   "rule": "link-private",
   "file": ".",
-  "reason": "maps-library is private; the EGS-wide nav roster is an org decision outside this AEMS pass"
+  "reason": "maps-library is private; the EGS-wide nav roster is an org decision outside this AEMS pass",
+  "match": "maps-library"
  },
  {
   "rule": "link-missing",

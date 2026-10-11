@@ -234,7 +234,7 @@
  },
  {
   "id": "private-adr-label",
-  "intent": "-",
+  "intent": "must-not: link to a document that does not exist",
   "pattern": "meta ADR-\\d+|RUNS ADR-001[45]|its ADR-0014",
   "unless": [
    "workspace"
