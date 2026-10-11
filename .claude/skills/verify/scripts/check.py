@@ -98,15 +98,17 @@ def check_examples(path, text):
         starts = starts[:-1]
     for a, b in zip(starts[::2], starts[1::2]):
         body = "\n".join(lines[a + 1:b])
-        kind = re.search(r'"kind":\s*("?)([^",\n]+)\1', body)
+        kind = re.search(r'"kind":\s*(?:"([^"\n]*)"|([^,\s}\]]+))', body)
         if not kind:
             continue
-        k = kind.group(2)
+        k = kind.group(1) if kind.group(1) is not None else kind.group(2)
         if re.fullmatch(r"\d+", k) and re.match(r"(aems-|\.github)", str(path.relative_to(EGS))):
             find("kind-literal", path, a + 1, f"literal kind number {k}; kinds are unpinned")
             continue
         layer = re.fullmatch(r"<AEMS (\w+) kind>", k)
         if not layer:
+            if k.startswith("<AEMS"):
+                find("kind-placeholder", path, a + 1, f"placeholder {k!r} is not <AEMS Layer kind>, so the example goes unchecked")
             continue
         layer = layer.group(1)
         tags = re.findall(r'\[\s*"([^"]+)"', body)
